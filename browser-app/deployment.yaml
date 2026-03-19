@@ -38,5 +38,16 @@ spec:
               value: "1000"
             - name: PGID
               value: "1000"
+            - name: WEB_AUTHENTICATION_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: browser-auth
+                  key: USERNAME
+
+            - name: WEB_AUTHENTICATION_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: browser-auth
+                  key: PASSWORD
           ports:
             - containerPort: 5800
