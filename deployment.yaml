@@ -17,9 +17,9 @@ spec:
         env:
         - name: JWT_SECRET
           valueFrom:
-          secretKeyRef:
-            name: jwt-secret
-            key: JWT_SECRET
+            secretKeyRef:
+              name: jwt-secret
+              key: JWT_SECRET
         image: sanjaymav/gin-demo:v3
         ports:
           - containerPort: 8080
