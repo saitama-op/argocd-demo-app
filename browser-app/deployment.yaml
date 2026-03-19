@@ -23,4 +23,4 @@ spec:
             - name: TZ
               value: "Asia/Kolkata"
           ports:
-            - containerPort: 3000
+            - containerPort: 5800
