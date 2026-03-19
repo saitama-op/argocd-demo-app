@@ -1,21 +1,45 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web-browser
+  name: browser-ui
+  namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: web-browser
+      app: browser-ui
   template:
     metadata:
       labels:
-        app: web-browser
+        app: browser-ui
     spec:
       containers:
-        - name: web-browser
-          image: jlesage/firefox
-          # 🔥 Resource control (VERY IMPORTANT)
+        - name: lxde
+          image: dorowu/ubuntu-desktop-lxde-vnc
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - containerPort: 6080
+
+          # 🔐 Secure credentials from Kubernetes Secret
+          env:
+            - name: USER
+              valueFrom:
+                secretKeyRef:
+                  name: browser-auth
+                  key: USER
+
+            - name: PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: browser-auth
+                  key: PASSWORD
+
+            # ⚡ Performance tuning
+            - name: RESOLUTION
+              value: "1024x768"
+
+          # 🧠 Resource optimization (IMPORTANT)
           resources:
             requests:
               memory: "256Mi"
@@ -24,30 +48,17 @@ spec:
               memory: "768Mi"
               cpu: "500m"
 
-          # ⚡ Performance tuning
-          env:
-            - name: TZ
-              value: "Asia/Kolkata"
-            - name: DISPLAY_WIDTH
-              value: "1024"
-            - name: DISPLAY_HEIGHT
-              value: "768"
-            - name: KEEP_APP_RUNNING
-              value: "1"
-            - name: PUID
-              value: "1000"
-            - name: PGID
-              value: "1000"
-            - name: WEB_AUTHENTICATION_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: browser-auth
-                  key: USERNAME
+          # 🩺 Optional health check
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 6080
+            initialDelaySeconds: 10
+            periodSeconds: 10
 
-            - name: WEB_AUTHENTICATION_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: browser-auth
-                  key: PASSWORD
-          ports:
-            - containerPort: 5800
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 6080
+            initialDelaySeconds: 30
+            periodSeconds: 20
