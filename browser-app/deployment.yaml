@@ -21,7 +21,7 @@ spec:
           ports:
             - containerPort: 6079
 
-          # 🔐 Credentials from Kubernetes Secret
+          # 🔐 Secret-based auth (safe for Git)
           env:
             - name: USER
               valueFrom:
@@ -39,7 +39,7 @@ spec:
             - name: RESOLUTION
               value: "1024x768"
 
-          # 🧠 Resource control
+          # 🧠 Resource optimization
           resources:
             requests:
               memory: "256Mi"
@@ -48,30 +48,28 @@ spec:
               memory: "768Mi"
               cpu: "500m"
 
-          # 🚀 Startup probe (prevents early kill)
+          # 🚀 VERY IMPORTANT: allow slow startup
           startupProbe:
             httpGet:
               path: /
               port: 6079
-            failureThreshold: 30
+            failureThreshold: 60   # wait up to ~10 min
             periodSeconds: 10
 
-          # ✅ Readiness probe
           readinessProbe:
             httpGet:
               path: /
               port: 6079
-            initialDelaySeconds: 10
+            initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 5
 
-          # 🔄 Liveness probe
           livenessProbe:
             httpGet:
               path: /
               port: 6079
-            initialDelaySeconds: 120
+            initialDelaySeconds: 180   # DO NOT reduce
             periodSeconds: 20
             timeoutSeconds: 5
             failureThreshold: 5
