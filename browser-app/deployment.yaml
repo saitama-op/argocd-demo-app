@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-browser
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-browser
+  template:
+    metadata:
+      labels:
+        app: web-browser
+    spec:
+      containers:
+        - name: web-browser
+          image: lscr.io/linuxserver/webtop:latest
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "Asia/Kolkata"
+          ports:
+            - containerPort: 3000
