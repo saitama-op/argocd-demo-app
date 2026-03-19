@@ -14,62 +14,28 @@ spec:
         app: browser-ui
     spec:
       containers:
-        - name: lxde
-          image: dorowu/ubuntu-desktop-lxde-vnc
+        - name: xfce
+          image: accetto/ubuntu-vnc-xfce-firefox
           imagePullPolicy: IfNotPresent
 
           ports:
-            - containerPort: 6079
+            - containerPort: 6901
 
-          # 🔐 Secret-based auth (safe for Git)
           env:
-            - name: USER
-              valueFrom:
-                secretKeyRef:
-                  name: browser-auth
-                  key: USER
-
-            - name: PASSWORD
+            - name: VNC_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: browser-auth
                   key: PASSWORD
 
             # ⚡ Performance tuning
-            - name: RESOLUTION
+            - name: VNC_RESOLUTION
               value: "1024x768"
 
-          # 🧠 Resource optimization
           resources:
             requests:
               memory: "256Mi"
               cpu: "200m"
             limits:
-              memory: "768Mi"
+              memory: "1Gi"
               cpu: "500m"
-
-          # 🚀 VERY IMPORTANT: allow slow startup
-          startupProbe:
-            httpGet:
-              path: /
-              port: 6079
-            failureThreshold: 60   # wait up to ~10 min
-            periodSeconds: 10
-
-          readinessProbe:
-            httpGet:
-              path: /
-              port: 6079
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            timeoutSeconds: 5
-            failureThreshold: 5
-
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 6079
-            initialDelaySeconds: 180   # DO NOT reduce
-            periodSeconds: 20
-            timeoutSeconds: 5
-            failureThreshold: 5

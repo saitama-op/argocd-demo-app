@@ -7,7 +7,6 @@ spec:
   selector:
     app: browser-ui
   ports:
-    - name: http
-      port: 80
-      targetPort: 6079
+    - port: 80
+      targetPort: 6901
   type: ClusterIP
