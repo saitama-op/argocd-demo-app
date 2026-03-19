@@ -21,6 +21,7 @@ spec:
           ports:
             - containerPort: 6901
 
+          # 🔐 VNC password from secret (FIXED)
           env:
             - name: VNC_PASSWORD
               valueFrom:
@@ -28,10 +29,15 @@ spec:
                   name: browser-auth
                   key: PASSWORD
 
+            # 🔥 CRITICAL FIX (forces password reset)
+            - name: RESET_VNC_PASSWORD
+              value: "yes"
+
             # ⚡ Performance tuning
             - name: VNC_RESOLUTION
               value: "1024x768"
 
+          # 🧠 Resource limits
           resources:
             requests:
               memory: "256Mi"
