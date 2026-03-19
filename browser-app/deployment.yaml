@@ -15,12 +15,28 @@ spec:
       containers:
         - name: web-browser
           image: jlesage/firefox
+          # 🔥 Resource control (VERY IMPORTANT)
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "768Mi"
+              cpu: "500m"
+
+          # ⚡ Performance tuning
           env:
+            - name: TZ
+              value: "Asia/Kolkata"
+            - name: DISPLAY_WIDTH
+              value: "1024"
+            - name: DISPLAY_HEIGHT
+              value: "768"
+            - name: KEEP_APP_RUNNING
+              value: "1"
             - name: PUID
               value: "1000"
             - name: PGID
               value: "1000"
-            - name: TZ
-              value: "Asia/Kolkata"
           ports:
             - containerPort: 5800
