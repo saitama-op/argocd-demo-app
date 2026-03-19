@@ -21,7 +21,7 @@ spec:
           ports:
             - containerPort: 6079
 
-          # 🔐 Secure credentials from Kubernetes Secret
+          # 🔐 Credentials from Kubernetes Secret
           env:
             - name: USER
               valueFrom:
@@ -39,7 +39,7 @@ spec:
             - name: RESOLUTION
               value: "1024x768"
 
-          # 🧠 Resource optimization (IMPORTANT)
+          # 🧠 Resource control
           resources:
             requests:
               memory: "256Mi"
@@ -48,17 +48,30 @@ spec:
               memory: "768Mi"
               cpu: "500m"
 
-          # 🩺 Optional health check
+          # 🚀 Startup probe (prevents early kill)
+          startupProbe:
+            httpGet:
+              path: /
+              port: 6079
+            failureThreshold: 30
+            periodSeconds: 10
+
+          # ✅ Readiness probe
           readinessProbe:
             httpGet:
               path: /
               port: 6079
             initialDelaySeconds: 10
             periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5
 
+          # 🔄 Liveness probe
           livenessProbe:
             httpGet:
               path: /
               port: 6079
-            initialDelaySeconds: 30
+            initialDelaySeconds: 120
             periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 5
