@@ -14,22 +14,26 @@ spec:
         app: browser-ui
     spec:
       containers:
-        - name: xfce
-          image: accetto/ubuntu-vnc-xfce
+        - name: firefox
+          image: jlesage/firefox
           imagePullPolicy: IfNotPresent
 
           ports:
-            - containerPort: 6901
+            - containerPort: 5800
 
-          # ⚡ Performance tuning
           env:
-            - name: VNC_RESOLUTION
-              value: "1024x768"
+            - name: TZ
+              value: "Asia/Kolkata"
+
+            - name: DISPLAY_WIDTH
+              value: "1024"
+            - name: DISPLAY_HEIGHT
+              value: "768"
 
           resources:
             requests:
               memory: "256Mi"
               cpu: "200m"
             limits:
-              memory: "1Gi"
+              memory: "768Mi"
               cpu: "500m"
