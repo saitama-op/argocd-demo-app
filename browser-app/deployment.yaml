@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: xfce
-          image: accetto/ubuntu-vnc-xfce-firefox
+          image: accetto/ubuntu-vnc-xfce
           imagePullPolicy: IfNotPresent
 
           ports:
