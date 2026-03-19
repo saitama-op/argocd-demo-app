@@ -19,7 +19,7 @@ spec:
           imagePullPolicy: IfNotPresent
 
           ports:
-            - containerPort: 6080
+            - containerPort: 6079
 
           # 🔐 Secure credentials from Kubernetes Secret
           env:
@@ -52,13 +52,13 @@ spec:
           readinessProbe:
             httpGet:
               path: /
-              port: 6080
+              port: 6079
             initialDelaySeconds: 10
             periodSeconds: 10
 
           livenessProbe:
             httpGet:
               path: /
-              port: 6080
+              port: 6079
             initialDelaySeconds: 30
             periodSeconds: 20
