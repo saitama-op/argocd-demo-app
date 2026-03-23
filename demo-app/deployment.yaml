@@ -20,6 +20,6 @@ spec:
             secretKeyRef:
               name: jwt-secret
               key: JWT_SECRET
-        image: sanjayk/gin-demo:22
+        image: sanjayk/gin-demo:23
         ports:
           - containerPort: 8080
